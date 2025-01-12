@@ -39,8 +39,8 @@ export class Bonsai {
     return {
       start: { x: this.width / 2, y: this.height * 0.9 },
       end: {
-        x: this.width / 2 + Math.sin(this.initialAngle) * 15,
-        y: this.height * 0.88 - Math.cos(this.initialAngle) * 15
+        x: this.width / 2 + Math.sin(this.initialAngle) * 10,
+        y: this.height * 0.89 - Math.cos(this.initialAngle) * 10
       },
       thickness: 14,
       color: '#4a3728',

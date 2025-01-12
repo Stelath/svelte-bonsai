@@ -57,43 +57,49 @@
 </script>
 
 <svg {width} {height} viewBox="0 0 {width} {height}">
-  <!-- Base -->
+  <!-- Bonsai Pot -->
   <g>
-    <!-- Pot rim -->
-    <line 
-      x1={width * 0.3} 
-      y1={height * 0.9} 
-      x2={width * 0.7} 
-      y2={height * 0.9}
-      stroke="#654321"
-      stroke-width="2"
+    <!-- Top rim layers -->
+    <rect
+      x={width * 0.25}
+      y={height * 0.88}
+      width={width * 0.5}
+      height={height * 0.02}
+      fill="#2a1810"
     />
-    <!-- Left side -->
-    <line 
-      x1={width * 0.35} 
-      y1={height * 0.9} 
-      x2={width * 0.4} 
-      y2={height * 0.95}
-      stroke="#654321"
-      stroke-width="2"
+    <rect
+      x={width * 0.23}
+      y={height * 0.9}
+      width={width * 0.54}
+      height={height * 0.015}
+      fill="#3a2820"
     />
-    <!-- Right side -->
-    <line 
-      x1={width * 0.65} 
-      y1={height * 0.9} 
-      x2={width * 0.6} 
-      y2={height * 0.95}
-      stroke="#654321"
-      stroke-width="2"
+    
+    <!-- Main pot body -->
+    <rect
+      x={width * 0.24}
+      y={height * 0.915}
+      width={width * 0.52}
+      height={height * 0.035}
+      fill="#2a1810"
     />
-    <!-- Bottom -->
-    <line 
-      x1={width * 0.4} 
-      y1={height * 0.95} 
-      x2={width * 0.6} 
-      y2={height * 0.95}
-      stroke="#654321"
-      stroke-width="2"
+    
+    <!-- Bottom rim -->
+    <rect
+      x={width * 0.22}
+      y={height * 0.95}
+      width={width * 0.56}
+      height={height * 0.02}
+      fill="#1a0800"
+    />
+    
+    <!-- Shadow effect -->
+    <ellipse
+      cx={width * 0.5}
+      cy={height * 0.975}
+      rx={width * 0.3}
+      ry={height * 0.01}
+      fill="rgba(0,0,0,0.2)"
     />
   </g>
 
