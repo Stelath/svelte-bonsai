@@ -23,11 +23,13 @@ export class Bonsai {
   private leafSize: number = 6;
   private maxDownwardAngle: number = Math.PI / 6;
   private branchLengthMultiplier: number = 2.8;
+  private allBranches: Branch[] = [];
 
   constructor(width: number, height: number) {
     this.width = width;
     this.height = height;
     this.trunk = this.createTrunk();
+    this.generateFullTree();
   }
 
   private createTrunk(): Branch {
@@ -51,8 +53,8 @@ export class Bonsai {
     };
   }
 
-  private growBranch(branch: Branch, depth: number = 0): void {
-    if (depth >= this.growthStage) return;
+  private generateBranches(branch: Branch, depth: number = 0): void {
+    if (depth >= this.maxGrowth) return;
 
     const maxSubBranches = Math.max(2, 4 - depth);
     const numSubBranches = Math.floor(this.randomInRange(1, maxSubBranches + 1));
@@ -107,40 +109,48 @@ export class Bonsai {
       };
 
       branch.children.push(newBranch);
-      this.growBranch(newBranch, depth + 1);
+      this.allBranches.push(newBranch);
+      this.generateBranches(newBranch, depth + 1);
     }
+  }
+
+  private generateFullTree(): void {
+    this.allBranches = [this.trunk];
+    this.generateBranches(this.trunk);
   }
 
   grow(): boolean {
     if (this.growthStage >= this.maxGrowth) return false;
-    
     this.growthStage++;
-    this.trunk.children = [];
-    this.growBranch(this.trunk);
     return true;
   }
 
   reset(): void {
     this.growthStage = 0;
     this.trunk = this.createTrunk();
+    this.allBranches = [];
+    this.generateFullTree();
   }
 
   getAllElements(): { branches: Branch[], leaves: Point[] } {
-    const branches: Branch[] = [this.trunk];
+    const visibleBranches = this.allBranches.slice(0, Math.max(1, Math.floor(this.allBranches.length * (this.growthStage / this.maxGrowth))));
     const leaves: Point[] = [];
     
-    const traverse = (branch: Branch) => {
-      if (branch.children.length === 0 && this.growthStage > 3) {
-        // Add leaves at the end of branches
+    // Add leaves to visible end branches
+    visibleBranches.forEach(branch => {
+      const isEndBranch = !this.allBranches.some(b => 
+        b !== branch && b.start.x === branch.end.x && b.start.y === branch.end.y
+      );
+      
+      if (this.growthStage > 3 && isEndBranch) {
         const angle = Math.atan2(
           branch.end.x - branch.start.x,
           branch.start.y - branch.end.y
         );
         
-        // Add multiple leaves at different angles
-        // Add more leaves with upward tendency
+        // Add multiple leaves with upward tendency
         for (let i = 0; i < 8; i++) {
-          const upwardBias = -Math.PI / 3; // Bias leaves to grow upward
+          const upwardBias = -Math.PI / 3;
           const leafAngle = angle + upwardBias + (Math.random() - 0.3) * Math.PI / 2;
           const leafLength = this.leafSize * (0.8 + Math.random() * 0.4);
           leaves.push({
@@ -149,11 +159,8 @@ export class Bonsai {
           });
         }
       }
-      branches.push(...branch.children);
-      branch.children.forEach(traverse);
-    };
+    });
     
-    traverse(this.trunk);
-    return { branches, leaves };
+    return { branches: visibleBranches, leaves };
   }
 }

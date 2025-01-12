@@ -5,7 +5,7 @@
   export let width = 400;
   export let height = 400;
   export let autoGrow = true;
-  export let growthInterval = 1000;
+  export let growthInterval = 50;
 
   let bonsai: Bonsai;
   interface Point {
