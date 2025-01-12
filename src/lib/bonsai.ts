@@ -16,10 +16,11 @@ export class Bonsai {
   private height: number;
   private trunk: Branch;
   private growthStage: number = 0;
-  private maxGrowth: number = 8;
-  private branchProbability: number = 0.7;
-  private maxBranchAngle: number = Math.PI / 3;
-  private leafSize: number = 5;
+  private maxGrowth: number = 7;
+  private branchProbability: number = 0.8;
+  private maxBranchAngle: number = Math.PI / 2;
+  private initialAngle: number = (Math.random() > 0.5 ? 1 : -1) * Math.PI / 4;
+  private leafSize: number = 10;
 
   constructor(width: number, height: number) {
     this.width = width;
@@ -30,8 +31,11 @@ export class Bonsai {
   private createTrunk(): Branch {
     return {
       start: { x: this.width / 2, y: this.height * 0.9 },
-      end: { x: this.width / 2, y: this.height * 0.85 },
-      thickness: 6,
+      end: {
+        x: this.width / 2 + Math.sin(this.initialAngle) * 40,
+        y: this.height * 0.88 - Math.cos(this.initialAngle) * 40
+      },
+      thickness: 15,
       color: '#4a3728',
       children: []
     };
@@ -57,12 +61,15 @@ export class Bonsai {
     for (let i = 0; i < numSubBranches; i++) {
       if (Math.random() > this.branchProbability) continue;
 
-      const angle = this.randomInRange(-this.maxBranchAngle, this.maxBranchAngle);
+      // Encourage growth in the initial direction for first few branches
+      const angleRange = depth < 2 ? this.maxBranchAngle / 2 : this.maxBranchAngle;
+      const angleOffset = depth < 2 ? this.initialAngle / 2 : 0;
+      const angle = this.randomInRange(-angleRange, angleRange) + angleOffset;
       const baseAngle = Math.atan2(
         branch.end.x - branch.start.x,
         branch.start.y - branch.end.y
       );
-      const newLength = branch.thickness * (1.5 + Math.random());
+      const newLength = branch.thickness * (3 + Math.random());
       const newThickness = branch.thickness * 0.8;
 
       const newBranch: Branch = {
