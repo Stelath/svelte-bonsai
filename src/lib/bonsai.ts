@@ -22,7 +22,7 @@ export class Bonsai {
   private initialAngle: number = 0; // Slight random initial tilt
   private leafSize: number = 6;
   private maxDownwardAngle: number = Math.PI / 3; // Increased to allow more droop
-  private branchLengthMultiplier: number = 2.5; // Slightly shorter branches for better balance
+  private branchLengthMultiplier: number = 3.5; // Slightly shorter branches for better balance
   private allBranches: Branch[] = [];
 
   // New property for downward bias

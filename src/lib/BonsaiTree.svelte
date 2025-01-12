@@ -2,8 +2,8 @@
   import { onMount, onDestroy } from 'svelte';
   import { Bonsai } from './bonsai';
 
-  export let width = 400;
-  export let height = 400;
+  export let width = 600;
+  export let height = 600;
   export let autoGrow = true;
   export let growthInterval = 50;
 
@@ -61,35 +61,35 @@
   <g>
     <!-- Top rim layers -->
     <rect
-      x={width * 0.25}
-      y={height * 0.88}
-      width={width * 0.5}
-      height={height * 0.02}
+      x={width * 0.3}
+      y={height * 0.9}
+      width={width * 0.4}
+      height={height * 0.015}
       fill="#2a1810"
     />
     <rect
-      x={width * 0.23}
-      y={height * 0.9}
-      width={width * 0.54}
-      height={height * 0.015}
+      x={width * 0.28}
+      y={height * 0.915}
+      width={width * 0.44}
+      height={height * 0.012}
       fill="#3a2820"
     />
     
     <!-- Main pot body -->
     <rect
-      x={width * 0.24}
-      y={height * 0.915}
-      width={width * 0.52}
-      height={height * 0.035}
+      x={width * 0.29}
+      y={height * 0.927}
+      width={width * 0.42}
+      height={height * 0.028}
       fill="#2a1810"
     />
     
     <!-- Bottom rim -->
     <rect
-      x={width * 0.22}
-      y={height * 0.95}
-      width={width * 0.56}
-      height={height * 0.02}
+      x={width * 0.27}
+      y={height * 0.955}
+      width={width * 0.46}
+      height={height * 0.015}
       fill="#1a0800"
     />
     
@@ -97,8 +97,8 @@
     <ellipse
       cx={width * 0.5}
       cy={height * 0.975}
-      rx={width * 0.3}
-      ry={height * 0.01}
+      rx={width * 0.25}
+      ry={height * 0.008}
       fill="rgba(0,0,0,0.2)"
     />
   </g>
@@ -124,7 +124,7 @@
     <circle
       cx={leaf.x}
       cy={leaf.y}
-      r={5}
+      r={8}
       fill={`rgb(${r}, ${g}, ${b})`}
       opacity={0.8}
     />
