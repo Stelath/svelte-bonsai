@@ -10,12 +10,14 @@
       width={400} 
       height={400} 
       autoGrow={true}
+      loopGrow={false}
       growthInterval={1000}
     />
   </div>
   <div class="controls">
     <button on:click={() => bonsaiComponent.grow()}>Grow</button>
     <button on:click={() => bonsaiComponent.reset()}>Reset</button>
+    <button on:click={() => bonsaiComponent.resetAndGrow()}>Reset & Grow</button>
   </div>
 </main>
 

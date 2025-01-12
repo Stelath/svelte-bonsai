@@ -5,7 +5,8 @@
   export let width = 600;
   export let height = 600;
   export let autoGrow = true;
-  export let growthInterval = 50;
+  export let loopGrow = false;
+  export let growthInterval = 1000;
 
   let bonsai: Bonsai;
   interface Point {
@@ -31,7 +32,11 @@
     if (autoGrow) {
       growthTimer = window.setInterval(() => {
         if (!bonsai.grow()) {
-          clearInterval(growthTimer);
+          if (loopGrow) {
+            bonsai.reset();
+          } else {
+            clearInterval(growthTimer);
+          }
         }
         elements = bonsai.getAllElements();
       }, growthInterval);
@@ -53,6 +58,20 @@
     if (!bonsai) return;
     bonsai.reset();
     elements = bonsai.getAllElements();
+  }
+
+  export function resetAndGrow(): void {
+    if (!bonsai) return;
+    if (growthTimer) clearInterval(growthTimer);
+    bonsai.reset();
+    elements = bonsai.getAllElements();
+    
+    growthTimer = window.setInterval(() => {
+      if (!bonsai.grow()) {
+        clearInterval(growthTimer);
+      }
+      elements = bonsai.getAllElements();
+    }, growthInterval);
   }
 </script>
 

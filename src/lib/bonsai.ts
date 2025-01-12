@@ -155,6 +155,7 @@ export class Bonsai {
 
   reset(): void {
     this.growthStage = 0;
+    this.initialAngle = 0; // Reset initial angle
     this.trunk = this.createTrunk();
     this.allBranches = [];
     this.generateFullTree();
