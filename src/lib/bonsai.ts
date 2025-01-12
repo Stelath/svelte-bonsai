@@ -19,7 +19,7 @@ export class Bonsai {
   private maxGrowth: number = 12;
   private branchProbability: number = 0.9;
   private maxBranchAngle: number = Math.PI / 2;
-  private initialAngle: number = 0;
+  private initialAngle: number = Math.PI / 5; // ~35 degrees
   private leafSize: number = 6;
   private maxDownwardAngle: number = Math.PI / 6;
   private branchLengthMultiplier: number = 2.8;
@@ -35,7 +35,10 @@ export class Bonsai {
   private createTrunk(): Branch {
     return {
       start: { x: this.width / 2, y: this.height * 0.9 },
-      end: { x: this.width / 2, y: this.height * 0.85 },
+      end: {
+        x: this.width / 2 + Math.sin(this.initialAngle) * 15,
+        y: this.height * 0.88 - Math.cos(this.initialAngle) * 15
+      },
       thickness: 14,
       color: '#4a3728',
       children: []
