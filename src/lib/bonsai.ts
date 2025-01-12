@@ -18,11 +18,11 @@ export class Bonsai {
   private growthStage: number = 0;
   private maxGrowth: number = 6;
   private branchProbability: number = 0.9;
-  private maxBranchAngle: number = Math.PI / 1.5; // Increased for wider spread
-  private initialAngle: number = 0;
+  private maxBranchAngle: number = Math.PI / 1.2; // Even wider spread
+  private initialAngle: number = 0; // Slight random initial tilt
   private leafSize: number = 6;
-  private maxDownwardAngle: number = Math.PI / 6;
-  private branchLengthMultiplier: number = 2.5; // Increased for longer branches
+  private maxDownwardAngle: number = Math.PI / 4; // Allow more downward angle
+  private branchLengthMultiplier: number = 2.5; // Slightly shorter branches for better balance
   private allBranches: Branch[] = [];
 
   constructor(width: number, height: number) {
@@ -78,22 +78,28 @@ export class Bonsai {
       let potentialAngle: number;
       const randomFactor = Math.random();
       
+      // Calculate base angle relative to vertical (0 is straight up)
+      const relativeAngle = Math.atan2(
+        branch.end.x - branch.start.x,
+        branch.start.y - branch.end.y
+      );
+
+      // Determine spread direction based on current position relative to trunk
+      const distanceFromCenter = branch.end.x - (this.width / 2);
+      let spreadBias = -Math.sign(distanceFromCenter) * 0.2; // Bias towards center
+      
       if (depth === 0) {
-        const baseSpread = Math.PI / 2; // Wider initial spread
-        const side = (i / numSubBranches) < 0.5 ? 1 : -1;
-        const spreadAngle = side * (baseSpread * randomFactor);
-        const upwardBias = -Math.PI / 4;
-        potentialAngle = spreadAngle + upwardBias;
-      } else if (depth === 1) {
-        const side = (i / numSubBranches) < 0.5 ? 1 : -1;
-        const spreadAngle = side * (Math.PI / 2.5 * randomFactor); // Wider secondary spread
-        const upwardBias = -Math.PI / 3;
-        potentialAngle = spreadAngle + upwardBias;
+        const baseSpread = Math.PI * 0.7; // Wider initial spread
+        // Force first branches to go opposite directions
+        const side = i === 0 ? -1 : (i === 1 ? 1 : (Math.random() < 0.5 ? 1 : -1));
+        const spreadAngle = side * (baseSpread * (0.5 + randomFactor * 0.5));
+        potentialAngle = spreadAngle;
       } else {
-        const side = (i / numSubBranches) < 0.5 ? 1 : -1;
-        const spreadAngle = side * (Math.PI / 3 * randomFactor); // Wider tertiary spread
-        const upwardBias = -Math.PI / 3;
-        potentialAngle = spreadAngle + upwardBias;
+        // Unified approach for all subsequent branches
+        const spreadRange = Math.PI * (0.8 - depth * 0.1); // Gradually decrease spread
+        const side = Math.random() < (0.5 + spreadBias) ? 1 : -1;
+        const spreadAngle = side * spreadRange * randomFactor;
+        potentialAngle = spreadAngle;
       }
 
       potentialAngle += this.randomInRange(-Math.PI / 8, Math.PI / 8);
@@ -164,9 +170,12 @@ export class Bonsai {
         );
         
         for (let i = 0; i < 8; i++) {
-          const upwardBias = -Math.PI / 3;
-          const leafSide = (i / 8) < 0.5 ? 1 : -1;
-          const spreadFactor = Math.random() * Math.PI / 3;
+          const upwardBias = -Math.PI / 4;
+          // Use position-based bias for leaves
+          const distanceFromCenter = branch.end.x - (this.width / 2);
+          const leafBias = -Math.sign(distanceFromCenter) * 0.2; // Bias towards center
+          const leafSide = Math.random() < (0.5 + leafBias) ? 1 : -1;
+          const spreadFactor = Math.random() * Math.PI * 0.8; // Even wider spread for leaves
           const leafAngle = angle + upwardBias + (leafSide * spreadFactor);
           const leafLength = this.leafSize * (0.8 + Math.random() * 0.4);
           leaves.push({

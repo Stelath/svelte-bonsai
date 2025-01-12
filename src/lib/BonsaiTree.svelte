@@ -110,12 +110,16 @@
     />
   {/each}
   <!-- Leaves -->
-  {#each elements.leaves as leaf, i}
+  {#each elements.leaves as leaf}
+    {@const colorSeed = (leaf.x * 0.37 + leaf.y * 0.73)}
+    {@const r = 60 + Math.floor(Math.abs(Math.sin(colorSeed)) * 20)}
+    {@const g = 165 + Math.floor(Math.abs(Math.cos(colorSeed)) * 30)}
+    {@const b = 70 + Math.floor(Math.abs(Math.sin(colorSeed * 2)) * 20)}
     <circle
       cx={leaf.x}
       cy={leaf.y}
       r={5}
-      fill={`rgb(${60 + Math.floor(Math.random() * 20)}, ${165 + Math.floor(Math.random() * 30)}, ${70 + Math.floor(Math.random() * 20)})`}
+      fill={`rgb(${r}, ${g}, ${b})`}
       opacity={0.8}
     />
   {/each}
