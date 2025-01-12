@@ -71,6 +71,3 @@ The component exposes the following methods:
 </button>
 ```
 
-## License
-
-MIT
