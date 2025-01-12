@@ -1,6 +1,6 @@
 {
   "name": "svelte-bonsai",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A customizable bonsai tree component for Svelte",
   "type": "module",
   "main": "./dist/index.js",
