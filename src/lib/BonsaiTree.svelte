@@ -57,6 +57,53 @@
 </script>
 
 <svg {width} {height} viewBox="0 0 {width} {height}">
+  <!-- Base trunk -->
+  {#if elements.branches[0]}
+    <line
+      x1={elements.branches[0].start.x}
+      y1={elements.branches[0].start.y}
+      x2={elements.branches[0].end.x}
+      y2={elements.branches[0].end.y}
+      stroke={elements.branches[0].color}
+      stroke-width={elements.branches[0].thickness}
+      stroke-linecap="round"
+    />
+  {/if}
+
+  <!-- Dirt Mound -->
+  <g>
+    <!-- Base dirt -->
+    <rect 
+      x={width * 0.32}
+      y={height * 0.895}
+      width={width * 0.36}
+      height={height * 0.006}
+      fill="#3d2b1f"
+    />
+    <ellipse
+      cx={width * 0.5}
+      cy={height * 0.895}
+      rx={width * 0.18} 
+      ry={height * 0.0125}
+      fill="#3d2b1f"
+    />
+    <!-- Top dirt/grass -->
+    <ellipse
+      cx={width * 0.5}
+      cy={height * 0.89}
+      rx={width * 0.16}
+      ry={height * 0.01}
+      fill="#4a3728"
+    />
+    <ellipse
+      cx={width * 0.5}
+      cy={height * 0.8875}
+      rx={width * 0.15}
+      ry={height * 0.0075}
+      fill="#2d5a27"
+    />
+  </g>
+
   <!-- Bonsai Pot -->
   <g>
     <!-- Top rim layers -->
@@ -103,8 +150,8 @@
     />
   </g>
 
-  <!-- Branches -->
-  {#each elements.branches as branch}
+  <!-- Rest of branches -->
+  {#each elements.branches.slice(1) as branch}
     <line
       x1={branch.start.x}
       y1={branch.start.y}

@@ -37,10 +37,10 @@ export class Bonsai {
 
   private createTrunk(): Branch {
     return {
-      start: { x: this.width / 2, y: this.height * 0.9 },
+      start: { x: this.width / 2, y: this.height * 0.88 },
       end: {
         x: this.width / 2 + Math.sin(this.initialAngle) * 10,
-        y: this.height * 0.89 - Math.cos(this.initialAngle) * 10
+        y: this.height * 0.86 - Math.cos(this.initialAngle) * 10
       },
       thickness: 14,
       color: '#4a3728',
