@@ -16,11 +16,12 @@ export class Bonsai {
   private height: number;
   private trunk: Branch;
   private growthStage: number = 0;
-  private maxGrowth: number = 7;
-  private branchProbability: number = 0.8;
-  private maxBranchAngle: number = Math.PI / 2;
-  private initialAngle: number = (Math.random() > 0.5 ? 1 : -1) * Math.PI / 4;
-  private leafSize: number = 10;
+  private maxGrowth: number = 10;
+  private branchProbability: number = 0.85;
+  private maxBranchAngle: number = Math.PI / 2.5;
+  private initialAngle: number = 0;
+  private leafSize: number = 6;
+  private maxDownwardAngle: number = Math.PI / 6; // Limit downward growth
 
   constructor(width: number, height: number) {
     this.width = width;
@@ -31,11 +32,8 @@ export class Bonsai {
   private createTrunk(): Branch {
     return {
       start: { x: this.width / 2, y: this.height * 0.9 },
-      end: {
-        x: this.width / 2 + Math.sin(this.initialAngle) * 40,
-        y: this.height * 0.88 - Math.cos(this.initialAngle) * 40
-      },
-      thickness: 15,
+      end: { x: this.width / 2, y: this.height * 0.75 },
+      thickness: 16,
       color: '#4a3728',
       children: []
     };
@@ -61,22 +59,41 @@ export class Bonsai {
     for (let i = 0; i < numSubBranches; i++) {
       if (Math.random() > this.branchProbability) continue;
 
-      // Encourage growth in the initial direction for first few branches
-      const angleRange = depth < 2 ? this.maxBranchAngle / 2 : this.maxBranchAngle;
-      const angleOffset = depth < 2 ? this.initialAngle / 2 : 0;
-      const angle = this.randomInRange(-angleRange, angleRange) + angleOffset;
+      // Calculate base angle from current branch
       const baseAngle = Math.atan2(
         branch.end.x - branch.start.x,
         branch.start.y - branch.end.y
       );
-      const newLength = branch.thickness * (3 + Math.random());
-      const newThickness = branch.thickness * 0.8;
+
+      // Calculate growth direction
+      let potentialAngle: number;
+      if (depth === 0) {
+        // First branches should spread out wide with upward tendency
+        const spreadAngle = (i % 2 === 0 ? 1 : -1) * Math.PI / 3;
+        const upwardBias = -Math.PI / 4;
+        potentialAngle = spreadAngle + upwardBias + this.randomInRange(-Math.PI / 6, Math.PI / 6);
+      } else {
+        // Other branches should tend upward with some variation
+        const side = ((depth + i) % 2 === 0 ? 1 : -1);
+        const spreadAngle = side * Math.PI / 6;
+        const upwardBias = -Math.PI / 4;
+        potentialAngle = spreadAngle + upwardBias + this.randomInRange(-Math.PI / 4, Math.PI / 4);
+      }
+
+      // Prevent downward growth
+      const finalAngle = baseAngle + potentialAngle;
+      if (Math.abs(finalAngle) > this.maxDownwardAngle) {
+        potentialAngle += (finalAngle > 0 ? -1 : 1) * (Math.PI / 3);
+      }
+      
+      const newLength = branch.thickness * (2.2 + Math.random());
+      const newThickness = branch.thickness * (0.65 + Math.random() * 0.1);
 
       const newBranch: Branch = {
         start: { ...branch.end },
-        end: this.calculateEndPoint(branch.end, newLength, baseAngle + angle),
+        end: this.calculateEndPoint(branch.end, newLength, baseAngle + potentialAngle),
         thickness: newThickness,
-        color: depth > 1 ? (Math.random() > 0.5 ? '#2d5a27' : '#3a6a34') : '#4a3728',
+        color: '#4a3728', // All branches are brown
         children: []
       };
 
@@ -112,8 +129,10 @@ export class Bonsai {
         );
         
         // Add multiple leaves at different angles
-        for (let i = 0; i < 3; i++) {
-          const leafAngle = angle + (Math.random() - 0.5) * Math.PI / 2;
+        // Add more leaves with upward tendency
+        for (let i = 0; i < 6; i++) {
+          const upwardBias = -Math.PI / 3; // Bias leaves to grow upward
+          const leafAngle = angle + upwardBias + (Math.random() - 0.3) * Math.PI / 2;
           const leafLength = this.leafSize * (0.8 + Math.random() * 0.4);
           leaves.push({
             x: branch.end.x + Math.sin(leafAngle) * leafLength,

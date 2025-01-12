@@ -58,20 +58,44 @@
 
 <svg {width} {height} viewBox="0 0 {width} {height}">
   <!-- Base -->
-  <path 
-    d="M{width * 0.35},{height * 0.9}
-       L{width * 0.65},{height * 0.9}
-       L{width * 0.63},{height * 0.93}
-       L{width * 0.37},{height * 0.93}Z" 
-    fill="#8B4513"
-  />
-  <!-- Soil -->
-  <path
-    d="M{width * 0.37},{height * 0.9}
-       L{width * 0.63},{height * 0.9}
-       Q{width * 0.5},{height * 0.87} {width * 0.37},{height * 0.9}Z"
-    fill="#3E2723"
-  />
+  <g>
+    <!-- Pot rim -->
+    <line 
+      x1={width * 0.3} 
+      y1={height * 0.9} 
+      x2={width * 0.7} 
+      y2={height * 0.9}
+      stroke="#654321"
+      stroke-width="2"
+    />
+    <!-- Left side -->
+    <line 
+      x1={width * 0.35} 
+      y1={height * 0.9} 
+      x2={width * 0.4} 
+      y2={height * 0.95}
+      stroke="#654321"
+      stroke-width="2"
+    />
+    <!-- Right side -->
+    <line 
+      x1={width * 0.65} 
+      y1={height * 0.9} 
+      x2={width * 0.6} 
+      y2={height * 0.95}
+      stroke="#654321"
+      stroke-width="2"
+    />
+    <!-- Bottom -->
+    <line 
+      x1={width * 0.4} 
+      y1={height * 0.95} 
+      x2={width * 0.6} 
+      y2={height * 0.95}
+      stroke="#654321"
+      stroke-width="2"
+    />
+  </g>
 
   <!-- Branches -->
   {#each elements.branches as branch}
