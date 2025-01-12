@@ -18,11 +18,11 @@ export class Bonsai {
   private growthStage: number = 0;
   private maxGrowth: number = 6;
   private branchProbability: number = 0.9;
-  private maxBranchAngle: number = Math.PI / 2;
+  private maxBranchAngle: number = Math.PI / 1.5; // Increased for wider spread
   private initialAngle: number = 0;
   private leafSize: number = 6;
   private maxDownwardAngle: number = Math.PI / 6;
-  private branchLengthMultiplier: number = 2.8;
+  private branchLengthMultiplier: number = 2.5; // Increased for longer branches
   private allBranches: Branch[] = [];
 
   constructor(width: number, height: number) {
@@ -79,19 +79,19 @@ export class Bonsai {
       const randomFactor = Math.random();
       
       if (depth === 0) {
-        const baseSpread = Math.PI / 2.5;
+        const baseSpread = Math.PI / 2; // Wider initial spread
         const side = (i / numSubBranches) < 0.5 ? 1 : -1;
         const spreadAngle = side * (baseSpread * randomFactor);
         const upwardBias = -Math.PI / 4;
         potentialAngle = spreadAngle + upwardBias;
       } else if (depth === 1) {
         const side = (i / numSubBranches) < 0.5 ? 1 : -1;
-        const spreadAngle = side * (Math.PI / 3 * randomFactor);
+        const spreadAngle = side * (Math.PI / 2.5 * randomFactor); // Wider secondary spread
         const upwardBias = -Math.PI / 3;
         potentialAngle = spreadAngle + upwardBias;
       } else {
         const side = (i / numSubBranches) < 0.5 ? 1 : -1;
-        const spreadAngle = side * (Math.PI / 4 * randomFactor);
+        const spreadAngle = side * (Math.PI / 3 * randomFactor); // Wider tertiary spread
         const upwardBias = -Math.PI / 3;
         potentialAngle = spreadAngle + upwardBias;
       }
@@ -110,11 +110,17 @@ export class Bonsai {
       
       if (endPoint.y > this.height * 0.9) continue;
 
+      // Generate slightly varied brown color for branch
+      const colorVariation = Math.floor(this.randomInRange(-20, 20));
+      const r = Math.min(Math.max(74 + colorVariation, 54), 94);
+      const g = Math.min(Math.max(55 + colorVariation, 35), 75);
+      const b = Math.min(Math.max(40 + colorVariation, 20), 60);
+      
       const newBranch: Branch = {
         start: { ...branch.end },
         end: endPoint,
         thickness: newThickness,
-        color: '#4a3728',
+        color: `rgb(${r}, ${g}, ${b})`,
         children: []
       };
 

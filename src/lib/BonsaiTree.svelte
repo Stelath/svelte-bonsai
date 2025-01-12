@@ -110,12 +110,12 @@
     />
   {/each}
   <!-- Leaves -->
-  {#each elements.leaves as leaf}
+  {#each elements.leaves as leaf, i}
     <circle
       cx={leaf.x}
       cy={leaf.y}
       r={5}
-      fill="#4CAF50"
+      fill={`rgb(${60 + Math.floor(Math.random() * 20)}, ${165 + Math.floor(Math.random() * 30)}, ${70 + Math.floor(Math.random() * 20)})`}
       opacity={0.8}
     />
   {/each}
