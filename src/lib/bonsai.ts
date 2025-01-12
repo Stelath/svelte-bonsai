@@ -16,12 +16,13 @@ export class Bonsai {
   private height: number;
   private trunk: Branch;
   private growthStage: number = 0;
-  private maxGrowth: number = 10;
-  private branchProbability: number = 0.85;
-  private maxBranchAngle: number = Math.PI / 2.5;
+  private maxGrowth: number = 12;
+  private branchProbability: number = 0.9;
+  private maxBranchAngle: number = Math.PI / 2;
   private initialAngle: number = 0;
   private leafSize: number = 6;
-  private maxDownwardAngle: number = Math.PI / 6; // Limit downward growth
+  private maxDownwardAngle: number = Math.PI / 6;
+  private branchLengthMultiplier: number = 2.8;
 
   constructor(width: number, height: number) {
     this.width = width;
@@ -32,8 +33,8 @@ export class Bonsai {
   private createTrunk(): Branch {
     return {
       start: { x: this.width / 2, y: this.height * 0.9 },
-      end: { x: this.width / 2, y: this.height * 0.75 },
-      thickness: 16,
+      end: { x: this.width / 2, y: this.height * 0.85 },
+      thickness: 14,
       color: '#4a3728',
       children: []
     };
@@ -65,19 +66,27 @@ export class Bonsai {
         branch.start.y - branch.end.y
       );
 
-      // Calculate growth direction
+      // Calculate growth direction with more natural variation
       let potentialAngle: number;
+      const randomFactor = Math.random();
+      
       if (depth === 0) {
-        // First branches should spread out wide with upward tendency
-        const spreadAngle = (i % 2 === 0 ? 1 : -1) * Math.PI / 3;
-        const upwardBias = -Math.PI / 4;
+        // First branches spread wide with strong upward tendency
+        const spreadAngle = (i % 2 === 0 ? 1 : -1) * (Math.PI / 3 + randomFactor * Math.PI / 6);
+        const upwardBias = -Math.PI / 3;
+        potentialAngle = spreadAngle + upwardBias + this.randomInRange(-Math.PI / 8, Math.PI / 8);
+      } else if (depth === 1) {
+        // Second level branches alternate sides with moderate spread
+        const side = (i % 2 === 0 ? 1 : -1);
+        const spreadAngle = side * (Math.PI / 4 + randomFactor * Math.PI / 6);
+        const upwardBias = -Math.PI / 3;
         potentialAngle = spreadAngle + upwardBias + this.randomInRange(-Math.PI / 6, Math.PI / 6);
       } else {
-        // Other branches should tend upward with some variation
+        // Higher branches have more random growth but maintain upward tendency
         const side = ((depth + i) % 2 === 0 ? 1 : -1);
-        const spreadAngle = side * Math.PI / 6;
-        const upwardBias = -Math.PI / 4;
-        potentialAngle = spreadAngle + upwardBias + this.randomInRange(-Math.PI / 4, Math.PI / 4);
+        const spreadAngle = side * (Math.PI / 5 + randomFactor * Math.PI / 4);
+        const upwardBias = -Math.PI / 2.5;
+        potentialAngle = spreadAngle + upwardBias + this.randomInRange(-Math.PI / 5, Math.PI / 5);
       }
 
       // Prevent downward growth
@@ -86,7 +95,7 @@ export class Bonsai {
         potentialAngle += (finalAngle > 0 ? -1 : 1) * (Math.PI / 3);
       }
       
-      const newLength = branch.thickness * (2.2 + Math.random());
+      const newLength = branch.thickness * (this.branchLengthMultiplier + Math.random() * 1.5);
       const newThickness = branch.thickness * (0.65 + Math.random() * 0.1);
 
       const newBranch: Branch = {
@@ -130,7 +139,7 @@ export class Bonsai {
         
         // Add multiple leaves at different angles
         // Add more leaves with upward tendency
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 8; i++) {
           const upwardBias = -Math.PI / 3; // Bias leaves to grow upward
           const leafAngle = angle + upwardBias + (Math.random() - 0.3) * Math.PI / 2;
           const leafLength = this.leafSize * (0.8 + Math.random() * 0.4);
