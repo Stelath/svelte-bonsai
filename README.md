@@ -1,6 +1,9 @@
-# svelte-bonsai
+# Svelte Bonsai
 
-![Bonsai Tree Component](./bonsai.png)
+<div style="display: flex; align-items: center; gap: 20px;">
+  <img src="assets/bonsai-growing.gif" alt="Bonsai Tree Animation" height="350">
+  <img src="assets/svelte-bonsai-logo.jpg" alt="Svelte Bonsai Logo" height="350">
+</div>
 
 A customizable bonsai tree component for Svelte that grows and animates over time.
 
@@ -68,6 +71,3 @@ The component exposes the following methods:
 </button>
 ```
 
-## License
-
-MIT
